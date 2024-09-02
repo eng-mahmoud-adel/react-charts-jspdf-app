@@ -1,8 +1,8 @@
 
 import { ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
-import { pieChartData } from '../data/data';
-import { Label } from '../enums/label.enum';
-import { IChartData } from '../App';
+// import { pieChartData } from '../../data/data';
+import { Label } from '../../enums/label.enum';
+import { IChartData } from '../../App';
 
 interface ILabelPosition {
     cx: number;
@@ -37,7 +37,7 @@ const BasePieChart = ({ handleChartClick }: IBasePieChart) => {
         <ResponsiveContainer width="100%" height="80%">
             <PieChart width={400} height={400}>
                 <Pie
-                    data={pieChartData}
+                    data={[]}
                     cx="50%"
                     cy="50%"
                     labelLine={false}
@@ -50,9 +50,9 @@ const BasePieChart = ({ handleChartClick }: IBasePieChart) => {
                         handleChartClick(Label.TOTAL_PERCENTAGE, props.payload.payload)
                     }}
                 >
-                    {pieChartData.map((entry, index) => (
+                    {/* {pieChartData.map((entry, index) => (
                         <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                    ))}
+                    ))} */}
                 </Pie>
             </PieChart>
         </ResponsiveContainer >

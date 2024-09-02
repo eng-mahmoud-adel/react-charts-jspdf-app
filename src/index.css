@@ -16,7 +16,7 @@
     }
 
     body {
-        @apply h-screen bg-slate-200 overflow-x-hidden;
+        @apply h-screen bg-teal-950 overflow-x-hidden;
     }
 }
 
@@ -25,11 +25,7 @@
         @apply mx-4 md:mx-8 lg:mx-12;
     }
 
-    .wrapper {
-        @apply grid lg:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-8 xl:gap-10 my-4;
-    }
-
     .chart-container {
-        @apply bg-white h-[500px] border border-gray-300 px-4 py-6 rounded-lg shadow-lg;
+        @apply bg-gray-950 text-white;
     }
 }

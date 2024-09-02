@@ -1,7 +1,7 @@
 import { XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, Cell } from 'recharts';
-import { barChartData } from '../data/data';
-import { Label } from '../enums/label.enum';
-import { IChartData } from '../App';
+// import { barChartData } from '../../data/data';
+import { Label } from '../../enums/label.enum';
+import { IChartData } from '../../App';
 import { useState } from 'react';
 
 interface IBaseBarChart {
@@ -16,7 +16,7 @@ const BaseBarChart = ({ handleChartClick }: IBaseBarChart) => {
             <BarChart
                 width={500}
                 height={300}
-                data={barChartData}
+                data={[]}
                 margin={{
                     top: 5,
                     right: 30,
@@ -34,12 +34,12 @@ const BaseBarChart = ({ handleChartClick }: IBaseBarChart) => {
                 <YAxis />
                 <Tooltip cursor={{ fill: 'transparent' }} />
                 <Bar dataKey="value">
-                    {barChartData.map((entry, index) => (
+                    {/* {barChartData.map((entry, index) => (
                         <Cell
                             key={`cell-${index}`}
                             fill={selectedPoint === entry.year ? 'red' : '#8884d8'}
                         />
-                    ))}
+                    ))} */}
                 </Bar>
             </BarChart>
         </ResponsiveContainer>
