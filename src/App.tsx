@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import "./App.css";
 import BaseBarChart from "./components/charts/BarChart";
 import BaseLineChart from "./components/charts/LineChart";
@@ -7,8 +7,10 @@ import { exportPDF } from "./utils/exportToPDF";
 import {
   clicksImpressionslineChartData,
   insightsData,
+  usersBarChartData,
   userslineChartData,
   usersMediumBarChartData,
+  usersTopTenCountriesBarChartData,
 } from "./data/data";
 import InsightsCard from "./components/cards/InsightsCard";
 
@@ -31,14 +33,13 @@ function App() {
 
       <div className="border-b-4 -mx-12 border-black"></div>
 
-      <div ref={chartsContainerRef} className="py-6">
+      <div ref={chartsContainerRef} className="flex gap-6 py-6">
         <div className="w-3/4 grid grid-cols-2 gap-6">
           {/* left side */}
           <div className="flex flex-col gap-6">
             <div className="chart-container h-72">
               <BaseLineChart
                 data={userslineChartData}
-                showYAxis={true}
                 rotateXAxisContent={false}
               />
             </div>
@@ -46,7 +47,6 @@ function App() {
             <div className="chart-container h-72">
               <BaseLineChart
                 data={clicksImpressionslineChartData}
-                showYAxis={false}
                 rotateXAxisContent={true}
               />
             </div>
@@ -57,7 +57,6 @@ function App() {
             <div className="chart-container h-72">
               <BaseLineChart
                 data={clicksImpressionslineChartData}
-                showYAxis={false}
                 rotateXAxisContent={true}
               />
             </div>
@@ -66,25 +65,39 @@ function App() {
               <div className="chart-container h-96 grow">
                 <BaseBarChart
                   data={usersMediumBarChartData}
+                  barColor="#18d52bde"
+                  ticks={[0, 50000]}
+                  barSize={20}
                   showCartesianGrid={false}
-                  showYAxis={false}
                   isVerticalChart={true}
                 />
               </div>
 
               <div className="chart-container h-96 grow">
                 <BaseBarChart
-                  data={usersMediumBarChartData}
-                  showCartesianGrid={false}
-                  showYAxis={false}
-                  isVerticalChart={true}
+                  data={usersBarChartData}
+                  barColor="#ff5594"
+                  ticks={[0, 5000, 10000, 15000, 20000]}
+                  barSize={80}
+                  showCartesianGrid={true}
+                  isVerticalChart={false}
                 />
               </div>
             </div>
           </div>
         </div>
 
-        <div className="w-1/4"></div>
+        <div className="w-1/4">
+          <div className="chart-container h-[30rem]">
+            <BaseBarChart
+              data={usersTopTenCountriesBarChartData}
+              barColor="#07a7a7"
+              ticks={[0, 50000, 100000, 150000]}
+              barSize={20}
+              showCartesianGrid={false}
+              isVerticalChart={true}
+            />
+          </div></div>
       </div>
 
       {/* <button

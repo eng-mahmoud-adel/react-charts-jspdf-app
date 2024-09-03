@@ -3,13 +3,12 @@ import {
   XAxis,
   YAxis,
   CartesianGrid,
-  Tooltip,
   ResponsiveContainer,
   BarChart,
   Bar,
   Cell,
 } from "recharts";
-import { Label } from "../../enums/label.enum";
+import { formatMoney } from "../../utils/formatNumbers";
 
 interface IEntry {
   id: number;
@@ -19,14 +18,19 @@ interface IEntry {
 
 interface IBaseBarChart<T extends IEntry> {
   data: T[];
+  barColor: string;
+  ticks: number[];
+  barSize: number;
   showCartesianGrid: boolean;
   showYAxis?: boolean;
   isVerticalChart: boolean;
 }
 const BaseBarChart = <T extends IEntry>({
   data,
+  barColor,
+  ticks,
+  barSize,
   showCartesianGrid,
-  showYAxis,
   isVerticalChart,
 }: IBaseBarChart<T>) => {
   const [selectedPoint, setSelectedPoint] = useState("");
@@ -40,28 +44,39 @@ const BaseBarChart = <T extends IEntry>({
         data={data}
         margin={{
           top: 50,
-          right: 20,
-          left: 0,
+          right: isVerticalChart ? 50 : 20,
+          left: isVerticalChart ? 90 : 10,
           bottom: 50,
         }}
-        barSize={20}
+        barSize={barSize}
         onClick={(props) => {
           setSelectedPoint(props.activePayload?.[0].payload.label);
         }}
       >
-        {showCartesianGrid ? <CartesianGrid strokeDasharray="3 3" /> : null}
-        {isVerticalChart ? (
-          <XAxis dataKey="label" />
-        ) : (
-          <YAxis dataKey="label" />
-        )}
-        {showYAxis ? isVerticalChart ? <YAxis /> : <XAxis /> : null}
+        {showCartesianGrid ? <CartesianGrid strokeDasharray="0 0" vertical={false} /> : null}
+        <XAxis
+          type={isVerticalChart ? 'number' : 'category'}
+          dataKey={isVerticalChart ? undefined : 'label'}
+          tickLine={false}
+          tickFormatter={isVerticalChart ? formatMoney : undefined}
+          stroke="#fff"
+          axisLine={false}
+          ticks={isVerticalChart ? ticks : undefined} />
+        <YAxis type={isVerticalChart ? 'category' : 'number'}
+          dataKey={isVerticalChart ? 'label' : undefined}
+          tickLine={false}
+          tickFormatter={isVerticalChart ? undefined : formatMoney}
+          stroke="#fff"
+          ticks={isVerticalChart ? undefined : ticks}
+          axisLine={isVerticalChart ? true : false}
+        />
         {/* <Tooltip cursor={{ fill: "transparent" }} /> */}
+        {/* <Legend align="left" verticalAlign="top" /> */}
         <Bar dataKey="value">
           {data.map((entry, index) => (
             <Cell
               key={`cell-${index}`}
-              fill={selectedPoint === entry.label ? "red" : "#8884d8"}
+              fill={selectedPoint === entry.label ? "red" : barColor}
             />
           ))}
         </Bar>
