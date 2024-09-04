@@ -6,6 +6,7 @@ import BasePieChart from "./components/charts/PieChart";
 import { exportPDF } from "./utils/exportToPDF";
 import {
   clicksImpressionslineChartData,
+  devicesPieChart,
   insightsData,
   usersBarChartData,
   userslineChartData,
@@ -20,7 +21,7 @@ function App() {
   return (
     <div className="App">
       {/* Insights Cards */}
-      <div className="grid grid-cols-8 py-6 justify-items-center">
+      <div className="grid grid-cols-4 md:grid-cols-4 lg:grid-cols-8 gap-6 py-6 justify-items-center">
         {insightsData.map((item) => (
           <InsightsCard
             key={item.id}
@@ -33,8 +34,11 @@ function App() {
 
       <div className="border-b-4 -mx-12 border-black"></div>
 
-      <div ref={chartsContainerRef} className="flex gap-6 py-6">
-        <div className="w-3/4 grid grid-cols-2 gap-6">
+      <div
+        ref={chartsContainerRef}
+        className="flex flex-col lg:flex-row gap-6 py-6"
+      >
+        <div className="w-full lg:w-3/4 grid lg:grid-cols-2 gap-6">
           {/* left side */}
           <div className="flex flex-col gap-6">
             <div className="chart-container h-72">
@@ -87,7 +91,7 @@ function App() {
           </div>
         </div>
 
-        <div className="w-1/4">
+        <div className="w-full lg:w-1/4 flex flex-col gap-6">
           <div className="chart-container h-[30rem]">
             <BaseBarChart
               data={usersTopTenCountriesBarChartData}
@@ -96,8 +100,18 @@ function App() {
               barSize={20}
               showCartesianGrid={false}
               isVerticalChart={true}
+              isCustomTick={true}
             />
-          </div></div>
+          </div>
+          <div className="chart-container !bg-transparent h-[30rem]">
+            <BasePieChart
+              data={devicesPieChart}
+              // barColor="#07a7a7"
+              // ticks={[0, 50000, 100000, 150000]}
+              // barSize={20}
+            />
+          </div>
+        </div>
       </div>
 
       {/* <button

@@ -24,6 +24,7 @@ interface IBaseBarChart<T extends IEntry> {
   showCartesianGrid: boolean;
   showYAxis?: boolean;
   isVerticalChart: boolean;
+  isCustomTick?: boolean;
 }
 const BaseBarChart = <T extends IEntry>({
   data,
@@ -32,8 +33,26 @@ const BaseBarChart = <T extends IEntry>({
   barSize,
   showCartesianGrid,
   isVerticalChart,
+  isCustomTick,
 }: IBaseBarChart<T>) => {
   const [selectedPoint, setSelectedPoint] = useState("");
+
+  const CustomizedTick = (props: any) => {
+    const { x, y, payload, index } = props;
+    const isEven = index % 2 === 0;
+
+    return (
+      <text
+        x={x}
+        y={y + (isEven ? 0 : 15)}
+        dy={16}
+        textAnchor="middle"
+        fill="#fff"
+      >
+        {formatMoney(payload.value)}
+      </text>
+    );
+  };
 
   return (
     <ResponsiveContainer width="100%" height="100%">
@@ -53,17 +72,22 @@ const BaseBarChart = <T extends IEntry>({
           setSelectedPoint(props.activePayload?.[0].payload.label);
         }}
       >
-        {showCartesianGrid ? <CartesianGrid strokeDasharray="0 0" vertical={false} /> : null}
+        {showCartesianGrid ? (
+          <CartesianGrid strokeDasharray="0 0" vertical={false} />
+        ) : null}
         <XAxis
-          type={isVerticalChart ? 'number' : 'category'}
-          dataKey={isVerticalChart ? undefined : 'label'}
+          type={isVerticalChart ? "number" : "category"}
+          dataKey={isVerticalChart ? undefined : "label"}
           tickLine={false}
           tickFormatter={isVerticalChart ? formatMoney : undefined}
           stroke="#fff"
           axisLine={false}
-          ticks={isVerticalChart ? ticks : undefined} />
-        <YAxis type={isVerticalChart ? 'category' : 'number'}
-          dataKey={isVerticalChart ? 'label' : undefined}
+          ticks={isVerticalChart ? ticks : undefined}
+          tick={isCustomTick ? <CustomizedTick /> : undefined}
+        />
+        <YAxis
+          type={isVerticalChart ? "category" : "number"}
+          dataKey={isVerticalChart ? "label" : undefined}
           tickLine={false}
           tickFormatter={isVerticalChart ? undefined : formatMoney}
           stroke="#fff"

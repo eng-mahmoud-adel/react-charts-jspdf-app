@@ -1,6 +1,4 @@
-import { ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
-// import { pieChartData } from '../../data/data';
-import { Label } from "../../enums/label.enum";
+import { ResponsiveContainer, PieChart, Pie, Cell, Legend } from "recharts";
 
 interface ILabelPosition {
   cx: number;
@@ -11,17 +9,11 @@ interface ILabelPosition {
   value: number;
 }
 
-interface IBasePieChart {}
+interface IBasePieChart<T> {
+  data: T[];
+}
 
-const COLORS = [
-  "#0088FE",
-  "#00C49F",
-  "#FFBB28",
-  "#FF8042",
-  "#685aa8",
-  "#5aa88b",
-  "#a6a85a",
-];
+const COLORS = ["#ff5594", "#07a7a7", "#84379b"];
 
 const RADIAN = Math.PI / 180;
 const renderCustomizedLabel = ({
@@ -44,31 +36,33 @@ const renderCustomizedLabel = ({
       textAnchor={x > cx ? "start" : "end"}
       dominantBaseline="central"
     >
-      {`${(value * 100).toFixed(0)}%`}
+      {`${value.toFixed(0)}%`}
     </text>
   );
 };
 
-const BasePieChart = ({}: IBasePieChart) => {
+const BasePieChart = <T,>({ data }: IBasePieChart<T>) => {
   return (
     <ResponsiveContainer width="100%" height="80%">
       <PieChart width={400} height={400}>
         <Pie
-          data={[]}
+          data={data}
           cx="50%"
-          cy="50%"
+          cy="40%"
           labelLine={false}
           label={renderCustomizedLabel}
           outerRadius={130}
+          innerRadius={75}
           fill="#8884d8"
           dataKey="value"
           className="outline-none"
           onClick={(props) => {}}
         >
-          {/* {pieChartData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                    ))} */}
+          {data.map((entry, index) => (
+            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+          ))}
         </Pie>
+        <Legend iconType="circle" verticalAlign="top" />
       </PieChart>
     </ResponsiveContainer>
   );
