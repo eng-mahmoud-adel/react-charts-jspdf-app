@@ -36,15 +36,17 @@ function App() {
 
       <div
         ref={chartsContainerRef}
-        className="flex flex-col lg:flex-row gap-6 py-6"
+        className="flex flex-col xl:flex-row gap-6 py-6"
       >
-        <div className="w-full lg:w-3/4 grid lg:grid-cols-2 gap-6">
+        <div className="w-full xl:w-3/4 grid xl:grid-cols-2 gap-6">
           {/* left side */}
           <div className="flex flex-col gap-6">
             <div className="chart-container h-72">
               <BaseLineChart
                 data={userslineChartData}
                 rotateXAxisContent={false}
+                dataKeys={['value1', 'value2']}
+                legendValues={["Users", "User (previous 28 days)"]}
               />
             </div>
 
@@ -52,8 +54,18 @@ function App() {
               <BaseLineChart
                 data={clicksImpressionslineChartData}
                 rotateXAxisContent={true}
+                dataKeys={['value1', 'value2']}
+                legendValues={["Clicks", "Impressions"]}
               />
             </div>
+
+            {/* export button */}
+            <button
+              className='bg-[#FF8042] text-white p-4 rounded-md font-semibold text-lg my-4'
+              onClick={() => exportPDF({ chartsContainerRef })}
+            >
+              Export to PDF
+            </button>
           </div>
 
           {/* right side */}
@@ -62,10 +74,12 @@ function App() {
               <BaseLineChart
                 data={clicksImpressionslineChartData}
                 rotateXAxisContent={true}
+                dataKeys={['value1', 'value2']}
+                legendValues={["Ecommerce Conversion Rate", "Cost per Conversion"]}
               />
             </div>
 
-            <div className="flex gap-4">
+            <div className="flex flex-col md:flex-row gap-4">
               <div className="chart-container h-96 grow">
                 <BaseBarChart
                   data={usersMediumBarChartData}
@@ -91,8 +105,8 @@ function App() {
           </div>
         </div>
 
-        <div className="w-full lg:w-1/4 flex flex-col gap-6">
-          <div className="chart-container h-[30rem]">
+        <div className="w-full xl:w-1/4 flex flex-col md:flex-row md:justify-between xl:flex-col gap-6">
+          <div className="chart-container h-[30rem] md:grow">
             <BaseBarChart
               data={usersTopTenCountriesBarChartData}
               barColor="#07a7a7"
@@ -106,21 +120,11 @@ function App() {
           <div className="chart-container !bg-transparent h-[30rem]">
             <BasePieChart
               data={devicesPieChart}
-              // barColor="#07a7a7"
-              // ticks={[0, 50000, 100000, 150000]}
-              // barSize={20}
+              colors={["#ff5594", "#07a7a7", "#84379b"]}
             />
           </div>
         </div>
       </div>
-
-      {/* <button
-        className='bg-[#FF8042] text-white p-4 rounded-md font-semibold text-lg my-4'
-        onClick={() => exportPDF({ chartsContainerRef, selectedData })}
-      >
-        Export to PDF
-      </button>
- */}
     </div>
   );
 }

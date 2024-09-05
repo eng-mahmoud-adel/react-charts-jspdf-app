@@ -7,7 +7,6 @@ import {
     ResponsiveContainer,
     Dot,
 } from "recharts";
-import { Label } from "../../enums/label.enum";
 import { useState } from "react";
 import { formatMoney } from "../../utils/formatNumbers";
 
@@ -15,18 +14,22 @@ interface IBaseLineChart<T> {
     data: T[];
     showYAxis?: boolean;
     rotateXAxisContent?: boolean;
+    dataKeys: string[];
+    legendValues: string[];
 }
 
 const BaseLineChart = <T,>({
     data,
     showYAxis,
     rotateXAxisContent,
+    dataKeys,
+    legendValues
 }: IBaseLineChart<T>) => {
     const [selectedPoint, setSelectedPoint] = useState("");
 
     const CustomizedDot = (props: any) => {
         const { cx, cy, payload } = props;
-        const isSelected = selectedPoint === payload.year;
+        const isSelected = selectedPoint === payload.date;
 
         return (
             <Dot
@@ -56,23 +59,6 @@ const BaseLineChart = <T,>({
         );
     };
 
-    // const renderCustomLegend = (props: any) => {
-    //     const { payload } = props;
-
-    //     return (
-    //         <ul style={{ display: 'flex', listStyleType: 'none', padding: 0 }}>
-    //             {payload.map((entry: any, index: number) => (
-    //                 <li key={`item-${index}`} style={{ display: "flex", alignItems: "center", gap: "6px", position: "absolute", top: 0 }}>
-    //                     <svg width="25" height="25" viewBox="0 0 32 32" fill={entry.color}>
-    //                         <path d="M0 16h32v1H0z" />
-    //                     </svg>
-    //                     <span style={{ color: '#fff' }}>{entry.value}</span>
-    //                 </li>
-    //             ))}
-    //         </ul>
-    //     );
-    // };
-
     return (
         <ResponsiveContainer width="100%" height="100%" className="relative">
             <LineChart
@@ -86,7 +72,7 @@ const BaseLineChart = <T,>({
                     bottom: 50,
                 }}
                 onClick={(props) => {
-                    setSelectedPoint(props.activePayload?.[0].payload.year);
+                    setSelectedPoint(props.activePayload?.[0].payload.date);
                 }}
             >
                 <XAxis
@@ -114,8 +100,11 @@ const BaseLineChart = <T,>({
                         stroke="#fff"
                     />
                 )}
-                <Legend verticalAlign="top" iconSize={25} iconType="plainline" />
-                {/* <Legend content={renderCustomLegend} /> */}
+                <Legend wrapperStyle={{ marginTop: '-30px' }} verticalAlign="top" iconSize={25} iconType="plainline" formatter={(value) => {
+                    if (value === dataKeys[0]) return legendValues[0];
+                    if (value === dataKeys[1]) return legendValues[1];
+                    return value;
+                }} />
                 <Line
                     type="monotone"
                     dataKey="value1"

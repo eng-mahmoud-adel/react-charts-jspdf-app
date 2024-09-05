@@ -11,9 +11,9 @@ interface ILabelPosition {
 
 interface IBasePieChart<T> {
   data: T[];
+  colors: string[]
 }
 
-const COLORS = ["#ff5594", "#07a7a7", "#84379b"];
 
 const RADIAN = Math.PI / 180;
 const renderCustomizedLabel = ({
@@ -33,7 +33,7 @@ const renderCustomizedLabel = ({
       x={x}
       y={y}
       fill="white"
-      textAnchor={x > cx ? "start" : "end"}
+      textAnchor="middle"
       dominantBaseline="central"
     >
       {`${value.toFixed(0)}%`}
@@ -41,7 +41,13 @@ const renderCustomizedLabel = ({
   );
 };
 
-const BasePieChart = <T,>({ data }: IBasePieChart<T>) => {
+const BasePieChart = <T,>({ data, colors }: IBasePieChart<T>) => {
+
+  const customLegendFormatter = (value: string, entry: any) => {
+    const { payload } = entry;
+    return payload.label;
+  };
+
   return (
     <ResponsiveContainer width="100%" height="80%">
       <PieChart width={400} height={400}>
@@ -56,13 +62,12 @@ const BasePieChart = <T,>({ data }: IBasePieChart<T>) => {
           fill="#8884d8"
           dataKey="value"
           className="outline-none"
-          onClick={(props) => {}}
         >
           {data.map((entry, index) => (
-            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+            <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
           ))}
         </Pie>
-        <Legend iconType="circle" verticalAlign="top" />
+        <Legend iconType="circle" verticalAlign="top" formatter={customLegendFormatter} />
       </PieChart>
     </ResponsiveContainer>
   );

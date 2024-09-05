@@ -94,8 +94,6 @@ const BaseBarChart = <T extends IEntry>({
           ticks={isVerticalChart ? undefined : ticks}
           axisLine={isVerticalChart ? true : false}
         />
-        {/* <Tooltip cursor={{ fill: "transparent" }} /> */}
-        {/* <Legend align="left" verticalAlign="top" /> */}
         <Bar dataKey="value">
           {data.map((entry, index) => (
             <Cell

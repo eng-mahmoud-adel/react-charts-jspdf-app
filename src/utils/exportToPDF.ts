@@ -1,55 +1,39 @@
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 
-interface ISelectedData {
-  income: { year: string; value: string };
-  expenses: { year: string; value: string };
-  totalPercentage: { year: string; value: string };
-}
-
 interface IArguments {
-  chartsContainerRef: React.MutableRefObject<null>;
-  selectedData: ISelectedData;
+    chartsContainerRef: React.MutableRefObject<null>;
 }
 
 export const exportPDF = ({ chartsContainerRef }: IArguments) => {
-  const container: any = chartsContainerRef.current;
+    const container: any = chartsContainerRef.current;
 
-  html2canvas(container).then((canvas) => {
-    const pdf = new jsPDF();
-    const pdfWidth = pdf.internal.pageSize.getWidth();
-    const pdfHeight = pdf.internal.pageSize.getHeight();
-    const imgWidth = pdfWidth - 10;
-    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+    html2canvas(container).then((canvas) => {
+        const pdf = new jsPDF();
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = pdf.internal.pageSize.getHeight();
+        const imgWidth = pdfWidth - 10;
+        const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
-    const xOffset = 5;
-    const yOffset = 10;
+        const xOffset = 5;
+        const yOffset = 10;
 
-    let heightLeft = imgHeight;
-    let position = 0;
-    let pageNumber = 0;
+        let height = imgHeight;
+        let position = yOffset;
 
-    while (heightLeft > 0) {
-      if (pageNumber > 0) {
-        pdf.addPage();
-      }
+        while (height > 0) {
+            if (position !== yOffset) {
+                pdf.addPage();
+            }
 
-      const pageHeight = pdfHeight - 10;
-      let imgHeightOnPage = Math.min(heightLeft, pageHeight);
+            const pageHeight = pdfHeight - yOffset * 2;
+            let imgHeightOnPage = Math.min(height, pageHeight);
 
-      pdf.addImage(
-        canvas.toDataURL("image/png"),
-        "PNG",
-        xOffset,
-        yOffset - position,
-        imgWidth,
-        imgHeightOnPage
-      );
-      position += imgHeightOnPage;
-      heightLeft -= pageHeight;
-      pageNumber++;
-    }
+            pdf.addImage(canvas.toDataURL("image/png"), "PNG", xOffset, position, imgWidth, imgHeightOnPage);
+            height -= pageHeight;
+            position = yOffset;
+        }
 
-    pdf.save("charts.pdf");
-  });
+        pdf.save("charts.pdf");
+    });
 };
